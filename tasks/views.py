@@ -10,9 +10,13 @@ class TaskListView(generic.ListView):
     model = Task
     template_name = "tasks/task_list.html"
     context_object_name = "tasks"
-    
+
     def get_queryset(self):
-        return Task.objects.prefetch_related('tags').order_by("done", "-created_at")
+        return (
+            Task.objects
+            .prefetch_related("tags")
+            .order_by("done", "-created_at")
+        )
 
 
 class TaskCreateView(generic.CreateView):
@@ -53,17 +57,17 @@ class TagCreateView(generic.CreateView):
     model = Tag
     form_class = TagForm
     template_name = "todo/tag_form.html"
-    success_url = reverse_lazy("tasks:tags")
+    success_url = reverse_lazy("tasks:tags")  # This is correct
 
 
 class TagUpdateView(generic.UpdateView):
     model = Tag
     form_class = TagForm
     template_name = "todo/tag_form.html"
-    success_url = reverse_lazy("tasks:tags")
+    success_url = reverse_lazy("tasks:tags")  # This is correct
 
 
 class TagDeleteView(generic.DeleteView):
     model = Tag
     template_name = "todo/tag_confirm_delete.html"
-    success_url = reverse_lazy("tasks:tags")
+    success_url = reverse_lazy("tasks:tags")  # This is correct

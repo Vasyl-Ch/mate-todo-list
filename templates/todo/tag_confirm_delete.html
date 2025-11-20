@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% block title %}Удаление тега{% endblock %}
+{% block title %}Confirm Tag Deletion{% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <div class="card border-warning">
       <div class="card-header bg-warning text-dark">
-        Подтверждение удаления тега
+        Confirm Tag Deletion
       </div>
       <div class="card-body">
-        <p>Вы действительно хотите удалить тег:</p>
+        <p>Do you really want to delete the tag:</p>
 
         <h4>
           {% if object.name %}
@@ -20,15 +20,14 @@
         </h4>
 
         <p class="text-muted">
-          Удаление тега не удалит задачи, но у задач этот тег будет убран.
+          Deleting the tag will not delete tasks, but the tag will be removed from the tasks.
         </p>
 
         <form method="post" class="d-inline">
           {% csrf_token %}
-          <button type="submit" class="btn btn-warning">Да, удалить тег</button>
+          <button type="submit" class="btn btn-warning">Yes, delete the tag</button>
+          <a href="{% url 'tasks:tags' %}" class="btn btn-secondary">Cancel</a>
         </form>
-
-        <a href="{% url 'tags' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
       </div>
     </div>
   </div>
