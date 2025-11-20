@@ -12,11 +12,7 @@ class TaskListView(generic.ListView):
     context_object_name = "tasks"
 
     def get_queryset(self):
-        return (
-            Task.objects
-            .prefetch_related("tags")
-            .order_by("done", "-created_at")
-        )
+        return Task.objects.prefetch_related("tags").order_by("done", "-created_at")
 
 
 class TaskCreateView(generic.CreateView):
