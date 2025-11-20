@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block header %}Tags{% endblock %}
+{% block content %}
+  <div class="mb-3">
+    <a class="btn btn-primary" href="{% url 'tasks:tag_add' %}">Add</a>
+  </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for tag in tags %}
+      <tr>
+        <td>{{ tag.name }}</td>
+        <td><a class="btn btn-secondary" href="{% url 'tasks:tag_update' tag.pk %}">Update</a></td>
+        <td><a class="btn btn-secondary" href="{% url 'tasks:tag_delete' tag.pk %}">Delete</a></td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="3">No tags yet.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

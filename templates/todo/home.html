@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block header %}TODO list{% endblock %}
+{% block content %}
+  <div class="mb-3">
+    <a class="btn btn-primary" href="{% url 'task_add' %}">Add task</a>
+  </div>
+
+  {% for task in tasks %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="task-actions">
+          {% if not task.done %}
+            <a href="{% url 'task_toggle' task.pk %}" class="btn btn-success">Complete</a>
+          {% else %}
+            <a href="{% url 'task_toggle' task.pk %}" class="btn btn-secondary">Undo</a>
+          {% endif %}
+        </div>
+
+        <h5 class="card-title">
+          {{ task.content }}
+          {% if task.done %}
+            <span class="text-success ms-2">Done</span>
+          {% else %}
+            <span class="text-danger ms-2">Not done</span>
+          {% endif %}
+        </h5>
+        <p class="card-text"><small class="text-muted">Created: {{ task.created_at|date:"F j, Y, g:i a" }}</small></p>
+        {% if task.deadline %}
+          <p class="text-danger">Deadline: {{ task.deadline|date:"F j, Y, g:i a" }}</p>
+        {% endif %}
+        <p>Tags:
+          {% for t in task.tags.all %}
+            <span class="badge bg-secondary">{{ t.name }}</span>
+          {% empty %}
+            <span class="text-muted">no tags</span>
+          {% endfor %}
+        </p>
+
+        <a href="{% url 'task_update' task.pk %}">Update</a> |
+        <a href="{% url 'task_delete' task.pk %}">Delete</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>No tasks yet.</p>
+  {% endfor %}
+{% endblock %}

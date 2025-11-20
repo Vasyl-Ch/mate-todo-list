@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Удаление тега{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <div class="card border-warning">
+      <div class="card-header bg-warning text-dark">
+        Подтверждение удаления тега
+      </div>
+      <div class="card-body">
+        <p>Вы действительно хотите удалить тег:</p>
+
+        <h4>
+          {% if object.name %}
+            {{ object.name }}
+          {% else %}
+            {{ object }}
+          {% endif %}
+        </h4>
+
+        <p class="text-muted">
+          Удаление тега не удалит задачи, но у задач этот тег будет убран.
+        </p>
+
+        <form method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-warning">Да, удалить тег</button>
+        </form>
+
+        <a href="{% url 'tags' %}" class="btn btn-outline-secondary ms-2">Отмена</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
