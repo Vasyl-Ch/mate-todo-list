@@ -35,13 +35,12 @@ class TaskDeleteView(generic.DeleteView):
     success_url = reverse_lazy("tasks:home")
 
 
-def toggle_task(request, pk):
-    task = get_object_or_404(Task, pk=pk)
-    task.done = not task.done
-    task.save()
-    return redirect("tasks:home")
-
-
+class ToggleTaskView(generic.View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.done = not task.done
+        task.save()
+        return redirect("tasks:home")
 # Tags views
 class TagListView(generic.ListView):
     model = Tag
