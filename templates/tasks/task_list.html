@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load tz %}
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Tasks</h2>
+    <a href="{% url 'tasks:task_add' %}" class="btn btn-primary">
+        + Add new task
+    </a>
+</div>
+
+{% if tasks %}
+    <div class="list-group">
+        {% for task in tasks %}
+            <div class="list-group-item border-0 py-3 px-0 {% if task.done %}text-muted{% endif %}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        {% if task.done %}
+                            <span class="me-3">✓</span>
+                        {% else %}
+                            <span class="me-3">•</span>
+                        {% endif %}
+                        <div class="d-flex align-items-center">
+                            <span class="{% if task.done %}text-decoration-line-through{% endif %} fw-bold fs-5">
+                                {{ task.content }}
+                            </span>
+                            {% if not task.done %}
+                                <span class="badge bg-danger ms-2">Not Done</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <form action="{% url 'tasks:task_toggle' task.id %}" method="post" class="me-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                {% if task.done %}Undo{% else %}Complete{% endif %}
+                            </button>
+                        </form>
+                        <a href="{% url 'tasks:task_update' task.id %}" class="btn btn-sm btn-outline-primary me-2">
+                            Update
+                        </a>
+                        <a href="{% url 'tasks:task_delete' task.id %}" class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-2 ms-5">
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <div class="d-flex align-items-center text-muted small">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            <span>{{ task.created_at|date:"d.m.Y H:i" }}</span>
+                        </div>
+                        
+                        {% if task.deadline %}
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-light text-dark border d-flex align-items-center">
+                                    <i class="bi bi-alarm me-1"></i>
+                                    {{ task.deadline|date:"d.m.Y H:i" }}
+                                    {% if task.deadline < now and not task.done %}
+                                        <span class="badge bg-danger ms-1">Overdue</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if task.tags.all %}
+                        <div class="d-flex flex-wrap gap-1 mt-2">
+                            {% for tag in task.tags.all %}
+                                <span class="badge bg-light text-dark border d-flex align-items-center">
+                                    <i class="bi bi-tag me-1"></i>
+                                    {{ tag.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if not forloop.last %}<hr class="my-1">{% endif %}
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-light border">
+        No tasks yet. <a href="{% url 'tasks:task_add' %}" class="alert-link">Add your first task</a>!
+    </div>
+{% endif %}
+
+<style>
+    .list-group-item {
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .badge {
+        padding: 0.35em 0.65em;
+        font-size: 0.8em;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
