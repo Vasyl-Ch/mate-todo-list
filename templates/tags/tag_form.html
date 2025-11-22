@@ -5,6 +5,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button class="btn btn-primary" type="submit">Save</button>
-    <a href="{% url 'tasks:home' %}" class="btn btn-outline-secondary">Cancel</a>
+    <a href="{% url 'tasks:tags' %}" class="btn btn-outline-secondary">Cancel</a>
   </form>
 {% endblock %}
